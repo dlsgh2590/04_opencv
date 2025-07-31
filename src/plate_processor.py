@@ -61,3 +61,8 @@ def process_plate_image(image_path, save_dir):
     cv2.imwrite(f"{save_path_prefix}_otsu.png", otsu)
 
     find_and_draw_contours(img, adaptive, save_path_prefix)
+
+def batch_process_plates(image_list, save_dir):
+    for image_path in image_list:
+        print(f"[INFO] Processing {image_path}")
+        process_plate_image(image_path, save_dir)
