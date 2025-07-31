@@ -13,7 +13,7 @@ current_image_index = 0
 draw = None
 img = None
 
-color_map = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (0, 0, 255)]  # TL, TR, BR, BL 색
+color_map = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (0, 0, 255)]
 label_map = ["TL", "TR", "BR", "BL"]
 
 def onMouse(event, x, y, flags, param):
@@ -50,14 +50,15 @@ def onMouse(event, x, y, flags, param):
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, color_map[idx], 2)
             cv2.imshow("License Plate Extractor", draw)
 
-            w1 = np.linalg.norm(bottomRight - bottomLeft)
-            w2 = np.linalg.norm(topRight - topLeft)
-            h1 = np.linalg.norm(topRight - bottomRight)
-            h2 = np.linalg.norm(topLeft - bottomLeft)
-            width = int(max(w1, w2))
-            height = int(max(h1, h2))
-
-            pts2 = np.float32([[0, 0], [width-1, 0], [width-1, height-1], [0, height-1]])
+            # ✅ 고정된 번호판 크기 사용 (300x150 픽셀)
+            width = 300
+            height = 150
+            pts2 = np.float32([
+                [0, 0], 
+                [width - 1, 0], 
+                [width - 1, height - 1], 
+                [0, height - 1]
+            ])
 
             mtrx = cv2.getPerspectiveTransform(pts1, pts2)
             result = cv2.warpPerspective(img, mtrx, (width, height))
