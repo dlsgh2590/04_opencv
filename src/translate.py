@@ -1,5 +1,5 @@
 # 평행 이동 (translate.py)
-
+ 
 import cv2
 import numpy as np
 
