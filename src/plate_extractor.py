@@ -23,7 +23,7 @@ def onMouse(event, x, y, flags, param):
 
     if event == cv2.EVENT_LBUTTONDOWN:
         cv2.circle(draw, (x, y), 10, (0, 255, 0), -1)
-        cv2.imshow("scanning", draw)
+        cv2.imshow("License Plate Extractor", draw)
         pts[pts_cnt] = [x, y]
         pts_cnt += 1
 
@@ -74,10 +74,10 @@ def load_next_image():
     draw = img.copy()
     pts_cnt = 0
     pts = np.zeros((4, 2), dtype=np.float32)
-    cv2.imshow("scanning", draw)
+    cv2.imshow("License Plate Extractor", draw)
 
 # 첫 이미지 로딩 및 마우스 콜백 설정
 load_next_image()
-cv2.setMouseCallback("scanning", onMouse)
+cv2.setMouseCallback("License Plate Extractor", onMouse)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
