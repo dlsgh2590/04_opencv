@@ -48,3 +48,16 @@ def find_and_draw_contours(img, binary, save_path_prefix):
     print(f"[INFO] 후보 개수: {candidate_cnt}")
     cv2.imwrite(f"{save_path_prefix}_contours.png", temp_result)
     cv2.imwrite(f"{save_path_prefix}_candidates.png", img_result)
+
+def process_plate_image(image_path, save_dir):
+    filename = os.path.basename(image_path).split('.')[0]
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    adaptive, otsu = binarize_image(gray)
+
+    save_path_prefix = os.path.join(save_dir, filename)
+    cv2.imwrite(f"{save_path_prefix}_adaptive.png", adaptive)
+    cv2.imwrite(f"{save_path_prefix}_otsu.png", otsu)
+
+    find_and_draw_contours(img, adaptive, save_path_prefix)
