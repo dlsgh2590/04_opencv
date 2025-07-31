@@ -24,3 +24,27 @@ def binarize_image(gray):
     _, otsu = cv2.threshold(max_contrast, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
     return adaptive, otsu
+
+def find_and_draw_contours(img, binary, save_path_prefix):
+    contours, _ = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    temp_result = np.copy(img)
+    cv2.drawContours(temp_result, contours, -1, (255, 255, 0), 1)
+
+    height, width, channel = img.shape
+    img_result = np.zeros((height, width, channel), dtype=np.uint8)
+
+    candidate_cnt = 0
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        length = max(w, h)
+        rate = w / h if h != 0 else 0
+
+        if 0.25 < rate < 1.0 and 20 < w < 200 and 20 < h < 200:
+            cv2.rectangle(temp_result, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            roi = img[y:y+h, x:x+w]
+            img_result[y:y+h, x:x+w] = roi
+            candidate_cnt += 1
+
+    print(f"[INFO] 후보 개수: {candidate_cnt}")
+    cv2.imwrite(f"{save_path_prefix}_contours.png", temp_result)
+    cv2.imwrite(f"{save_path_prefix}_candidates.png", img_result)
